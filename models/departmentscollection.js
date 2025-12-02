@@ -5,9 +5,10 @@ const DepartmentsCollectionSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    intentsHandled: {
-        type: [String], // list of intents mapped to this department
+    keywords: {      // 🔥 NEW: This is your “intent predictor”
+        type: [String],
         default: []
+    
     }
 });
 
