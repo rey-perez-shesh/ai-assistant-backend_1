@@ -3,11 +3,11 @@ const Departments = require("../models/departmentscollection");
 // CREATE Department
 exports.createDepartment = async (req, res) => {
     try {
-        const { name, intentsHandled } = req.body;
+        const { name, keywords } = req.body;
 
         const newDept = await Departments.create({
             name,
-            intentsHandled
+            keywords
         });
 
         return res.status(201).json({
@@ -70,11 +70,11 @@ exports.getDepartmentById = async (req, res) => {
 // UPDATE Department
 exports.updateDepartment = async (req, res) => {
     try {
-        const { name, intentsHandled } = req.body;
+        const { name, keywords } = req.body;
 
         const updatedDept = await Departments.findByIdAndUpdate(
             req.params.id,
-            { name, intentsHandled },
+            { name, keywords },
             { new: true }
         );
 
