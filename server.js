@@ -19,8 +19,8 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
-  .then(() => console.log("✅ MongoDB Connected Successfully"))
-  .catch((error) => console.error("❌ MongoDB Connection Error:", error));
+  .then(() => console.log(" MongoDB Connected Successfully"))
+  .catch((error) => console.error(" MongoDB Connection Error:", error));
 
 // ---------------------------
 // Import Routes
@@ -51,7 +51,7 @@ app.get("/", (req, res) => {
 // Error Handling Middleware
 // ---------------------------
 app.use((err, req, res, next) => {
-  console.error("🔥 SERVER ERROR:", err);
+  console.error(" SERVER ERROR:", err);
   res.status(500).json({
     success: false,
     message: "Internal server error",
@@ -65,5 +65,5 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(` Server running on port ${PORT}`);
 });
