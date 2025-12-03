@@ -46,6 +46,27 @@ app.use("/api/feedback", feedbackRoutes);          // For storing student feedba
 app.get("/", (req, res) => {
   res.send("AI Assistant Backend is Running...");
 });
+// Test endpoint — verify MongoDB connection and test insert/read
+app.get("/api/test/db", async (req, res) => {
+  try {
+    const Departments = require("./models/departmentscollection");
+    const count = await Departments.countDocuments();
+    const sample = await Departments.findOne().lean();
+    
+    res.json({
+      success: true,
+      message: "MongoDB connection is working",
+      totalDepartments: count,
+      sampleDepartment: sample
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "MongoDB connection error",
+      error: error.message
+    });
+  }
+});
 
 // ---------------------------
 // Error Handling Middleware
