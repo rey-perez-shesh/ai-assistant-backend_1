@@ -5,9 +5,17 @@ exports.createDepartment = async (req, res) => {
     try {
         const { name, keywords } = req.body;
 
+        // Validate required fields
+        if (!name) {
+            return res.status(400).json({
+                success: false,
+                message: "Department name is required."
+            });
+        }
+
         const newDept = await Departments.create({
             name,
-            keywords
+            keywords: keywords || []
         });
 
         return res.status(201).json({
