@@ -1,4 +1,3 @@
-const tf = require("@tensorflow/tfjs-node");
 const use = require("@tensorflow-models/universal-sentence-encoder");
 
 const Departments = require("../models/departmentscollection");
