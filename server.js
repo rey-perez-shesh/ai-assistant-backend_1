@@ -8,8 +8,8 @@ const app = express();
 // ---------------------------
 // Middleware
 // ---------------------------
-app.use(cors());
-app.use(express.json()); // parse JSON request bodies
+app.use(cors())
+app.use(express.json()) // parse JSON request bodies
 
 // ---------------------------
 // MongoDB Connection
