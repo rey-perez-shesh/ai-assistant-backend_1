@@ -25,27 +25,30 @@ exports.processInquiry = async (req, res) => {
             cleanedText: cleaned
         });
 
-        //  – TensorFlow NLP intent prediction
-        const prediction = await predictIntent(cleaned);
+        //  – TensorFlow NLP intent prediction (use exported function)
+        const prediction = await predictAIResponse(cleaned);
         const predictedIntent = prediction.intent;
         const confidence = prediction.confidence;
         const departmentName = prediction.department;
+        const answer = prediction.answer;
+        const kbId = prediction.kbId || null;
 
-        //  – Find mapped department
-        const department = await Departments.findOne({
-            intentsHandled: predictedIntent
-        });
- const savedInquiry = await InquiryHistory.create({
-            email,
-            inquiryText: cleaned,
-            predictedIntent: intent,
-            department: dept ? dept._id : null,
-            response: answer,
-            confidenceScore: confidence,
-            kbReference: kbId,
-            createdAt: new Date()
-        });
+        //  – Find mapped department by name
+        const department = departmentName
+            ? await Departments.findOne({ name: new RegExp(`^${departmentName}$`, 'i') })
+            : null;
 
+        // Update the initial inquiry record with prediction results
+        const updatedInquiry = await InquiryHistory.findByIdAndUpdate(
+            inquiryRecord._id,
+            {
+                intent: predictedIntent,
+                departmentId: department ? department._id : null,
+                aiResponse: answer,
+                confidence: confidence
+            },
+            { new: true }
+        );
 
         return res.status(200).json({
             success: true,
@@ -53,8 +56,10 @@ exports.processInquiry = async (req, res) => {
             data: {
                 intent: predictedIntent,
                 confidence,
-                department: department ? department.name : "Unmapped",
-                aiResponse
+                department: department ? department.name : (departmentName || "Unmapped"),
+                aiResponse: answer,
+                kbReference: kbId,
+                inquiry: updatedInquiry
             }
         });
 
